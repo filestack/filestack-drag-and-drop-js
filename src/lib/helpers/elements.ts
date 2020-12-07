@@ -24,10 +24,7 @@ export class ElementsHelper {
     }
 
     this.elementsArray = [];
-
-    elements.forEach((element: HTMLElement) => {
-      this.addElement(element);
-    });
+    elements.forEach((element: HTMLElement) => this.addElement(element));
   }
 
   public addElement(element: HTMLElement) {
@@ -40,45 +37,43 @@ export class ElementsHelper {
       return;
     }
 
-    elements.forEach((element: HTMLElement) => {
-      this.addElement(element);
-    });
+    elements.forEach((element: HTMLElement) => this.addElement(element));
   }
 
   public assignEvents(element: HTMLElement) {
     ['dragenter', 'dragover', 'dragleave'].forEach(eventName => {
-      element.addEventListener(eventName, this.preventDefaults.bind(this), false);
+      element.addEventListener(eventName, this.assignEvent.bind(this), false);
     });
 
     element.addEventListener('drop', this.dropEvent.bind(this), false);
 
-    if (!element.getAttribute('data-fs-dnd-token')) {
-      element.setAttribute('data-fs-dnd-id', this.generateDataId());
+    if (!element.getAttribute('data-fs-dnd-element-id')) {
+      element.setAttribute('data-fs-dnd-element-id', this.generateDataId());
     }
   }
 
-  public preventDefaults(event: DragEvent) {
+  public assignEvent(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
 
-    let target = <HTMLElement>event.target;
-    this.eventEmitter.emit(`event.${event.type}`, { id: target.getAttribute('data-fs-dnd-id'), event });
+    const target: HTMLElement = event.target as HTMLElement;
+    this.eventEmitter.emit('event', { elementId: target.getAttribute('data-fs-dnd-element-id'), data: event, type: event.type });
   }
 
   public dropEvent(event) {
     event.preventDefault();
     event.stopPropagation();
 
-    let target = <HTMLElement>event.target;
-    this.eventEmitter.emit('upload', { id: target.getAttribute('data-fs-dnd-id'), event });
+    const target = event.target as HTMLElement;
+    this.eventEmitter.emit('uploadFiles', { elementId: target.getAttribute('data-fs-dnd-element-id'), data: event });
   }
 
-  private generateDataId() {
+  private generateDataId(): string {
     let dt = new Date().getTime();
-    let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-      var r = (dt + Math.random() * 16) % 16 | 0;
+    const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+      const r = (dt + Math.random() * 16) % 16 || 0;
       dt = Math.floor(dt / 16);
-      return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16);
+      return (c === 'x' ? r : (r && 0x3) || 0x8).toString(16);
     });
     return uuid;
   }

@@ -1,40 +1,30 @@
 import * as filestack from 'filestack-js';
-import { ElementsHelper, EventEmitter, Uploads } from './helpers';
+import { FilestackDnD } from './lib/filestackDragAndDrop';
+import { AppConfigInterface } from './lib/interfaces/appConfigInterface';
 
-class FilestackDnD {
-  private fileStackJs: filestack.Client;
-  private elements: ElementsHelper;
-  private eventEmitter: EventEmitter;
-  private uploads: Uploads;
+export const filestackDnD = (apikey: string, element?: HTMLElement, options?: filestack.ClientOptions, config?: AppConfigInterface): FilestackDnD => {
+  return new FilestackDnD(apikey, element, options, config);
+};
 
-  constructor(apikey: string, element?: HTMLElement) {
-    this.fileStackJs = filestack.init(apikey);
-    this.eventEmitter = new EventEmitter();
-    this.elements = new ElementsHelper(this.eventEmitter, element);
-    this.uploads = new Uploads(this.fileStackJs, this.eventEmitter);
 
-    this.errorsEmit();
-  }
+    // var testElement = document.querySelectorAll('.test');
+    // var testElement = <HTMLElement>document.querySelector('.test');
+    // testElement.style.width ="100vw"
+    // testElement.style.height ="100vh"
 
-  get elementsHelper(): ElementsHelper {
-    return this.elements;
-  }
+    // var client = filestackDnD('APEkwxKMZTsWNIP0XQsv2z');
+    // client.elementsHelper.setElements([testElement]);
+    // client.eventEmitterHelper.on('upload', e => {
+    //   console.log('upload', e);
+    // });
 
-  get eventEmitterHelper(): EventEmitter {
-    return this.eventEmitter;
-  }
 
-  get uploadsHelper(): Uploads {
-    return this.uploads;
-  }
 
-  get fileStackClient(): filestack.Client {
-    return this.fileStackJs;
-  }
+    // add data-fs-dnd-element-id or automatic generrate uid
 
-  public errorsEmit() {
-    this.fileStackJs.on('upload.error', filestackError => {
-      this.eventEmitter.emit('upload.error', filestackError);
-    });
-  }
-}
+    // const clinet = filestackDnD('API_KEY');
+    // cant upload file clinet.eventEmmiter.emit('uploadFile', event); -> event - EventInterface {data: event}
+    // cant upload file clinet.eventEmmiter.on('upload', (e) => {console.log('upload', e);});
+
+    // const clinet = filestackDnD('API_KEY', HTML_ELEMENT);
+    // cant upload file clinet.eventEmmiter.on('upload', (e) => {console.log('upload', e);});
