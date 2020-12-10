@@ -64,15 +64,15 @@
             });
 
             pause = function() {
-                client.eventEmitterHelper.emit('pause', dropContainer.getAttribute('data-fs-dnd-element-id'));
+                client.emit('pause', dropContainer.getAttribute('data-fs-dnd-element-id'));
             }
 
             resume = function() {
-                client.eventEmitterHelper.emit('resume', dropContainer.getAttribute('data-fs-dnd-element-id'));
+                client.emit('resume', dropContainer.getAttribute('data-fs-dnd-element-id'));
             }
 
             cancel = function() {
-                client.eventEmitterHelper.emit('cancel', dropContainer.getAttribute('data-fs-dnd-element-id'));
+                client.emit('cancel', dropContainer.getAttribute('data-fs-dnd-element-id'));
             }
         };
     </script>
