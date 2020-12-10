@@ -1,9 +1,9 @@
 export enum UploadStatusEnum {
   error = 'error',
   info = 'info',
-  onProgress = 'onProgress',
+  progress = 'progress',
   finish = 'finish',
-  onRetry = 'onRetry',
+  retry = 'retry',
   successReadFile = 'successReadFile'
 };
 

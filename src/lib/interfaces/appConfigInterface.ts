@@ -1,6 +1,6 @@
 export interface AppConfigInterface {
-  allowMinMimetype: string[];
-  maxFileSize: number;
+  accept: string[];
+  maxSize: number;
   maxFiles: number;
   uploadMaxFiles: boolean;
 }

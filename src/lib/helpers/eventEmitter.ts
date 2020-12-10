@@ -1,4 +1,4 @@
-type Listener = (...args: any[]) => void;
+export type Listener = (...args: any[]) => void;
 interface Events {
   [event: string]: Listener[];
 }

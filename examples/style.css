@@ -1,0 +1,27 @@
+.container p {
+    color: red;
+    text-align: center;
+}
+
+.drop-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    width: 100%;
+    height: 200px;
+    border: 4px dashed #4aa1f3;
+}
+
+.uploadProgres {
+    width: 100%;
+    display: none;
+}
+
+.uploadProgres.onProgress {
+    display: block;
+}
+
+.button-container {
+    padding-top: 1em;
+}

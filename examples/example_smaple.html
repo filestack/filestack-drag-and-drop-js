@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title></title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="drop-container">Drag and Drop</div>
+    </div>
+
+    <script src="./../public/bundle.js"></script>
+
+    <script>
+        window.onload = function() {
+            const client = new fsDnd.FilestackDnD('API_KEY', dropContainer);
+            
+            client.on('progress', (e) => {
+                console.log('progress', e)
+            });
+
+            client.on('finish', (e) => {
+                console.log('finish', e)
+            });
+
+            client.on('error', (e) => {
+                console.log('error', e)
+            });
+        };
+    </script>
+</body>
+
+</html>

@@ -88,7 +88,7 @@ const extractFromItems = (items) => {
     }
   }
 
-  return Promise.all(promises).then(() => {
+  return Promise.all(promises).then((a) => {
     return files;
   });
 };

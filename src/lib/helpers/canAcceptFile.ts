@@ -1,14 +1,16 @@
+import * as filestack from 'filestack-js';
+
 import { AppConfigInterface } from './../interfaces/appConfigInterface';
 import { appConfig } from './../config/app';
 import { EventEmitter } from './../helpers';
 
-import { UploadCodeEnum } from './../enum/upload';
+import { UploadCodeEnum, UploadStatusEnum } from './../enum/upload';
 
 // @todo add errorEvent
 export class CanAcceptFileHelper {
   private config: AppConfigInterface;
 
-  constructor(private eventEmitter: EventEmitter, config?: AppConfigInterface) {
+  constructor(private eventEmitter: EventEmitter, config?: AppConfigInterface, private sdk?: filestack.Client) {
     if (config) {
       this.config = config;
     } else {
@@ -21,11 +23,11 @@ export class CanAcceptFileHelper {
     let canAcceptSize = this.maxSize(file);
 
     if (!canAcceptMinetype) {
-      this.eventEmitter.emit('upload', { type: 'error', data: file, code: UploadCodeEnum.MINETYPE });
+      this.eventEmitter.emit(UploadStatusEnum.error, { data: file, code: UploadCodeEnum.MINETYPE });
     }
 
     if (!canAcceptSize) {
-      this.eventEmitter.emit('upload', { type: 'error', data: file, code: UploadCodeEnum.MAX_FILE_SIZE });
+      this.eventEmitter.emit(UploadStatusEnum.error, { data: file, code: UploadCodeEnum.MAX_FILE_SIZE });
     }
 
     if (canAcceptMinetype && canAcceptSize) {
@@ -36,43 +38,45 @@ export class CanAcceptFileHelper {
   }
 
   public canAcceptMinetype(file: File): boolean {
-    if (this.config.allowMinMimetype === undefined || this.config.allowMinMimetype.length === 0) {
+    if (this.config.accept === undefined || this.config.accept.length === 0) {
       return true;
     }
-    return this.config.allowMinMimetype.some(singleAcceptOption => {
+    return this.config.accept.some(singleAcceptOption => {
+      const minetype: string = this.sdk.utils.extensionToMime(file.name);
+
       if (this.isMimetype(singleAcceptOption)) {
-        return this.matchesMimetype(file, singleAcceptOption);
+        return this.matchesMimetype(minetype, singleAcceptOption);
       }
       return this.matchesExtension(file, singleAcceptOption);
     });
   }
 
-  public matchesMimetype(file: File, singleAcceptOption: string): boolean {
-    if (file.type && singleAcceptOption === 'image/*') {
-      return file.type.indexOf('image/') !== -1;
+  public matchesMimetype(minetype: string, singleAcceptOption: string): boolean {
+    if (minetype && singleAcceptOption === 'image/*') {
+      return minetype.indexOf('image/') !== -1;
     }
-    if (file.type && singleAcceptOption === 'video/*') {
-      return file.type.indexOf('video/') !== -1;
+    if (minetype && singleAcceptOption === 'video/*') {
+      return minetype.indexOf('video/') !== -1;
     }
-    if (file.type && singleAcceptOption === 'audio/*') {
-      return file.type.indexOf('audio/') !== -1;
+    if (minetype && singleAcceptOption === 'audio/*') {
+      return minetype.indexOf('audio/') !== -1;
     }
-    if (file.type && singleAcceptOption === 'application/*') {
-      return file.type.indexOf('application/') !== -1;
+    if (minetype && singleAcceptOption === 'application/*') {
+      return minetype.indexOf('application/') !== -1;
     }
-    if (file.type && singleAcceptOption === 'text/*') {
-      return file.type.indexOf('text/') !== -1;
-    }
-
-    if (file.type && ['image/jpg', 'image/jpeg'].indexOf(singleAcceptOption) > -1) {
-      return ['image/jpg', 'image/jpeg'].indexOf(file.type) > -1;
+    if (minetype && singleAcceptOption === 'text/*') {
+      return minetype.indexOf('text/') !== -1;
     }
 
-    return file.type === singleAcceptOption;
+    if (minetype && ['image/jpg', 'image/jpeg'].indexOf(singleAcceptOption) > -1) {
+      return ['image/jpg', 'image/jpeg'].indexOf(minetype) > -1;
+    }
+
+    return minetype === singleAcceptOption;
   }
 
   public maxSize(file: File): boolean {
-    return file.size <= this.config.maxFileSize ? true : false;
+    return this.config.maxSize === 0 || file.size <= this.config.maxSize ? true : false;
   }
 
   public isMimetype(str: string): boolean {
