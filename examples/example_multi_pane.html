@@ -20,7 +20,7 @@
 
     <script>
         window.onload = function() {
-            const client = new fsDnd.FilestackDnD('API_KEY');
+            const client = new filestackDnD.FilestackDnD('API_KEY');
             client.setElements(document.querySelectorAll('.drop-container'));
 
             client.on('progress', (e) => {

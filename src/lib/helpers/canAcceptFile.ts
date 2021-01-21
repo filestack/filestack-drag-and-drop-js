@@ -6,7 +6,6 @@ import { EventEmitter } from './../helpers';
 
 import { UploadCodeEnum, UploadStatusEnum } from './../enum/upload';
 
-// @todo add errorEvent
 export class CanAcceptFileHelper {
   private config: AppConfigInterface;
 
@@ -19,8 +18,8 @@ export class CanAcceptFileHelper {
   }
 
   public canAcceptFile(file: File) {
-    let canAcceptMinetype = this.canAcceptMinetype(file);
-    let canAcceptSize = this.maxSize(file);
+    const canAcceptMinetype = this.canAcceptMinetype(file);
+    const canAcceptSize = this.maxSize(file);
 
     if (!canAcceptMinetype) {
       this.eventEmitter.emit(UploadStatusEnum.error, { data: file, code: UploadCodeEnum.MINETYPE });

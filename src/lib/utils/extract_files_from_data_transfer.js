@@ -22,17 +22,16 @@ const getPath = (path, name) => {
 };
 
 const extractFromItems = (items) => {
-  const files = [];
-
   const traverseDirectoryTree = (fileEntry, path = '') => {
     const promises = [];
 
     return new Promise((resolve) => {
       if (fileEntry.isDirectory) {
+
         const reader = fileEntry.createReader();
 
         const readFiles = () => {
-          reader.readEntries((dirContent) => {
+          reader.readEntries((dirContent, err) => {
             dirContent.forEach((dirItem) => {
               promises.push(traverseDirectoryTree(dirItem, getPath(path, fileEntry.name)));
             });
@@ -50,7 +49,7 @@ const extractFromItems = (items) => {
         fileEntry.file((file) => {
           if (isWantedFile(file.name)) {
             file.path = getPath(path, file.name);
-            files.push(file);
+            resolve(file)
           }
           resolve();
         });
@@ -61,8 +60,7 @@ const extractFromItems = (items) => {
   const extractUrl = (item) => {
     return new Promise((resolve) => {
       item.getAsString((url) => {
-        files.push({ url, source: 'dragged-from-web' });
-        resolve();
+        resolve({ url, source: 'dragged-from-web' });
       });
     });
   };
@@ -74,8 +72,7 @@ const extractFromItems = (items) => {
       const file = item.getAsFile();
       if (file) {
         // It is a simple file
-        files.push(file);
-        promises.push(Promise.resolve());
+        promises.push(Promise.resolve(file));
       }
     } else if (item.kind === 'file') {
       // It's not a simple file, possibly folder, try to scout its content.
@@ -88,7 +85,17 @@ const extractFromItems = (items) => {
     }
   }
 
-  return Promise.all(promises).then((a) => {
+  return Promise.all(promises).then((res) => {
+    let files = [];
+
+    if(res) {
+      files = res.map((file) => {
+        if(file) {
+          return file;
+        }
+      })
+    }
+
     return files;
   });
 };

@@ -18,7 +18,7 @@ module.exports = {
   devtool: 'eval-source-map',
   output: {
     publicPath: 'public',
-    library: 'fsDnd',
+    library: 'filestackDnD',
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'public'),
   },

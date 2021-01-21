@@ -1,4 +1,6 @@
 import { EventEmitter } from './eventEmitter';
+import { appConfig } from './../config/app';
+import { guid } from './../utils/guid';
 
 export class ElementsHelper {
   private elementsArray: HTMLElement[] = [];
@@ -42,22 +44,53 @@ export class ElementsHelper {
 
   public assignEvents(element: HTMLElement) {
     ['dragenter', 'dragover', 'dragleave'].forEach(eventName => {
-      element.addEventListener(eventName, this.assignEvent.bind(this), false);
+      element.addEventListener(eventName, this.assignDragEvent.bind(this), false);
     });
 
     element.addEventListener('drop', this.dropEvent.bind(this), false);
+    element.addEventListener('click', this.assignClickEvent.bind(this));
 
     if (!element.getAttribute('data-fs-dnd-element-id')) {
-      element.setAttribute('data-fs-dnd-element-id', this.generateDataId());
+      element.setAttribute('data-fs-dnd-element-id', guid());
     }
   }
 
-  public assignEvent(event: DragEvent) {
+  public assignClickEvent(event) {
+    const target: HTMLElement = event.target as HTMLElement;
+    this.eventEmitter.emit('click', { elementId: target.getAttribute('data-fs-dnd-element-id'), data: event, type: event.type });
+
+    if(appConfig.clickOpenSelectedFile) {
+      if(target.getAttribute('type') === 'type') {
+        target.click();
+      } else {
+        const input = document.createElement('input')
+        input.type = 'file';
+        input.style.display = 'none';
+        input.setAttribute('data-fs-dnd-element-id', target.getAttribute('data-fs-dnd-element-id'));
+
+        if(appConfig.maxFiles > 1) {
+          input.multiple = true
+        }
+
+        if(appConfig.accept.length > 0) {
+          input.accept = appConfig.accept.join(',');
+        }
+
+        document.body.append(input);
+        input.click();
+
+        input.addEventListener('change', (changeEvent) => {
+          this.eventEmitter.emit('uploadFiles', { elementId: target.getAttribute('data-fs-dnd-element-id'), data: changeEvent });
+        })
+      }
+    }
+  }
+
+  public assignDragEvent(event: DragEvent) {
     event.preventDefault();
-    event.stopPropagation();
 
     const target: HTMLElement = event.target as HTMLElement;
-    this.eventEmitter.emit('event', { elementId: target.getAttribute('data-fs-dnd-element-id'), data: event, type: event.type });
+    this.eventEmitter.emit(event.type, { elementId: target.getAttribute('data-fs-dnd-element-id'), data: event, type: event.type });
   }
 
   public dropEvent(event) {
@@ -65,16 +98,7 @@ export class ElementsHelper {
     event.stopPropagation();
 
     const target = event.target as HTMLElement;
+    this.eventEmitter.emit(event.type, { elementId: target.getAttribute('data-fs-dnd-element-id'), data: event, type: event.type });
     this.eventEmitter.emit('uploadFiles', { elementId: target.getAttribute('data-fs-dnd-element-id'), data: event });
-  }
-
-  private generateDataId(): string {
-    let dt = new Date().getTime();
-    const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-      const r = (dt + Math.random() * 16) % 16 | 0;
-      dt = Math.floor(dt / 16);
-      return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
-    });
-    return uuid;
   }
 }

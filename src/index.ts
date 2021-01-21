@@ -1,4 +1,3 @@
-//getMimetype
 import { Client, ClientOptions, UploadOptions, init } from 'filestack-js';
 
 import { ElementsHelper, EventEmitter, Uploads } from './lib/helpers';
@@ -14,7 +13,6 @@ export class FilestackDnD {
   private elements: ElementsHelper;
   private eventEmitter: EventEmitter;
   private uploads: Uploads;
-  private loaderPromise: Promise<any>;
 
   constructor(apikey: string | Client, element?: HTMLElement, appConfigs?: AppConfigInterface, sdkConfig?: ClientOptions) {
     if (!appConfigs) {
