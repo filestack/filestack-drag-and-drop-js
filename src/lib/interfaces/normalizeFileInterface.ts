@@ -1,3 +1,8 @@
+/**
+ * Normalize File
+ *
+ * @interface NormalizeFileInterface
+ */
 export interface NormalizeFileInterface {
   mimetype: string;
   name: string;

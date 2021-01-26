@@ -1,4 +1,4 @@
 export * from './eventInterface';
-export * from './appConfigInterface';
+export * from './optionsInterface';
 export * from './uploadConfigInterface';
 export * from './normalizeFileInterface';

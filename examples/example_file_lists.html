@@ -20,6 +20,7 @@
         <ul class="list">
         </ul>
     </div>
+    <div class="errors"></div>
     <script src="./../public/bundle.js"></script>
 
     <script>
@@ -29,6 +30,7 @@
 
             const client = new filestackDnD.FilestackDnD(API_KEY, dropContainer, {failOverMaxFiles: false, maxFiles: 4});
             const list = document.querySelector('.list');
+            const errorsBox = document.querySelector('.errors');
 
             client.on('successReadFile', (e) => {
                 let files = e['files'];
@@ -77,11 +79,15 @@
             });
 
             client.on('error', (e) => {
-                console.log('error', e);
-                let li = document.querySelector(`[data-id="${e.files[0]['uploadId']}"]`);
-
-                if(li) {
+                errorsBox.classList.add('active');
+                
+                if(e['files']) {
+                    let li = document.querySelector(`[data-id="${e.files[0]['uploadId']}"]`);
                     li.classList.add('error');
+                } else {
+                    let div = document.createElement('div');
+                    div.innerHTML = '-' + e['data']['message'] + ' (' + e['data']['details']['code'] + ' - ' + e['data']['details']['data']['error'] + ')';
+                    errorsBox.append(div);
                 }
             });
 

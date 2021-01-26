@@ -3,6 +3,9 @@ interface Events {
   [event: string]: Listener[];
 }
 
+/**
+ * Event Emitter
+ */
 export class EventEmitter {
   private readonly events: Events = {};
 

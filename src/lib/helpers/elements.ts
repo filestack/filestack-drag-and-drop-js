@@ -2,24 +2,56 @@ import { EventEmitter } from './eventEmitter';
 import { appConfig } from './../config/app';
 import { guid } from './../utils/guid';
 
+/**
+ * Elements Helper - add elements and bind drag and drop events
+ */
 export class ElementsHelper {
+
   private elementsArray: HTMLElement[] = [];
 
+  /**
+   * Constructor
+   *
+   * @param {EventEmitter} eventEmitter
+   * @param {HTMLElement} element
+   * @returns {void}
+   * @memberof ElementsHelper
+   */
   public constructor(private eventEmitter: EventEmitter, element?: HTMLElement) {
     if (element) {
       this.setElement(element);
     }
   }
 
+  /**
+   * Add Events to HTMLElement. Remove old element
+   *
+   * @returns {HTMLElement[]}
+   * @memberof ElementsHelper
+   */
   get elements(): HTMLElement[] {
     return this.elementsArray;
   }
 
+  /**
+   * Add Events to HTMLElement. Remove old element
+   *
+   * @param {HTMLElement} element
+   * @returns {void}
+   * @memberof ElementsHelper
+   */
   public setElement(element: HTMLElement) {
     this.assignEvents(element);
     this.elementsArray = [element];
   }
 
+  /**
+   * Add Events to elements HTMLElement. Remove old element.
+   *
+   * @param {HTMLElement | NodeListOf<Element>} elements
+   * @returns {void}
+   * @memberof ElementsHelper
+   */
   public setElements(elements: HTMLElement[] | NodeListOf<Element>) {
     if (!elements || elements.length <= 0) {
       return;
@@ -29,11 +61,25 @@ export class ElementsHelper {
     elements.forEach((element: HTMLElement) => this.addElement(element));
   }
 
+  /**
+   * Add Events to element HTMLElement.
+   *
+   * @param {HTMLElement} element
+   * @returns {void}
+   * @memberof ElementsHelper
+   */
   public addElement(element: HTMLElement) {
     this.assignEvents(element);
     this.elements.push(element);
   }
 
+  /**
+   * Add Events to elements HTMLElement.
+   *
+   * @param {HTMLElement | NodeListOf<Element>} elements
+   * @returns {void}
+   * @memberof ElementsHelper
+   */
   public addElements(elements: HTMLElement[] | NodeListOf<Element>) {
     if (!elements || elements.length <= 0) {
       return;
@@ -42,6 +88,13 @@ export class ElementsHelper {
     elements.forEach((element: HTMLElement) => this.addElement(element));
   }
 
+  /**
+   * Assign Events
+   *
+   * @param {HTMLElement} element
+   * @returns {void}
+   * @memberof ElementsHelper
+   */
   public assignEvents(element: HTMLElement) {
     ['dragenter', 'dragover', 'dragleave'].forEach(eventName => {
       element.addEventListener(eventName, this.assignDragEvent.bind(this), false);
@@ -55,6 +108,13 @@ export class ElementsHelper {
     }
   }
 
+  /**
+   * Assign Click Events
+   *
+   * @param {Event} event
+   * @returns {void}
+   * @memberof ElementsHelper
+   */
   public assignClickEvent(event) {
     const target: HTMLElement = event.target as HTMLElement;
     this.eventEmitter.emit('click', { elementId: target.getAttribute('data-fs-dnd-element-id'), data: event, type: event.type });
@@ -86,6 +146,13 @@ export class ElementsHelper {
     }
   }
 
+  /**
+   * Assign Drag Events
+   *
+   * @param {DragEvent} event
+   * @returns {void}
+   * @memberof ElementsHelper
+   */
   public assignDragEvent(event: DragEvent) {
     event.preventDefault();
 
@@ -93,6 +160,13 @@ export class ElementsHelper {
     this.eventEmitter.emit(event.type, { elementId: target.getAttribute('data-fs-dnd-element-id'), data: event, type: event.type });
   }
 
+  /**
+   * Assign Drop Events
+   *
+   * @param {DropEvent} event
+   * @returns {void}
+   * @memberof ElementsHelper
+   */
   public dropEvent(event) {
     event.preventDefault();
     event.stopPropagation();

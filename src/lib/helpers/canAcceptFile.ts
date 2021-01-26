@@ -1,15 +1,27 @@
-import * as filestack from 'filestack-js';
+import { Client } from 'filestack-js';
 
-import { AppConfigInterface } from './../interfaces/appConfigInterface';
+import { OptionsInterface } from './../interfaces';
 import { appConfig } from './../config/app';
 import { EventEmitter } from './../helpers';
 
 import { UploadCodeEnum, UploadStatusEnum } from './../enum/upload';
 
+/**
+ * Can Accept File Helper
+ */
 export class CanAcceptFileHelper {
-  private config: AppConfigInterface;
+  private config: OptionsInterface;
 
-  constructor(private eventEmitter: EventEmitter, config?: AppConfigInterface, private sdk?: filestack.Client) {
+  /**
+   * Constructor
+   *
+   * @param {EventEmitter} eventEmitter
+   * @param {OptionsInterface} config
+   * @param {Client} sdk
+   * @returns {void}
+   * @memberof CanAcceptFileHelper
+   */
+  constructor(private eventEmitter: EventEmitter, config?: OptionsInterface, private sdk?: Client) {
     if (config) {
       this.config = config;
     } else {
@@ -17,15 +29,24 @@ export class CanAcceptFileHelper {
     }
   }
 
+  /**
+   * Check file
+   *
+   * @param {File} file
+   * @returns {boolean}
+   * @memberof CanAcceptFileHelper
+   */
   public canAcceptFile(file: File) {
     const canAcceptMinetype = this.canAcceptMinetype(file);
     const canAcceptSize = this.maxSize(file);
 
     if (!canAcceptMinetype) {
+      console.log(1);
       this.eventEmitter.emit(UploadStatusEnum.error, { data: file, code: UploadCodeEnum.MINETYPE });
     }
 
     if (!canAcceptSize) {
+      console.log(2);
       this.eventEmitter.emit(UploadStatusEnum.error, { data: file, code: UploadCodeEnum.MAX_FILE_SIZE });
     }
 
@@ -36,6 +57,13 @@ export class CanAcceptFileHelper {
     return false;
   }
 
+  /**
+   * Check accept minetype
+   *
+   * @param {File} file
+   * @returns {boolean}
+   * @memberof CanAcceptFileHelper
+   */
   public canAcceptMinetype(file: File): boolean {
     if (this.config.accept === undefined || this.config.accept.length === 0) {
       return true;
@@ -50,6 +78,14 @@ export class CanAcceptFileHelper {
     });
   }
 
+  /**
+   * Matches Mimetype
+   *
+   * @param {string} minetype
+   * @param {string} singleAcceptOption
+   * @returns {boolean}
+   * @memberof CanAcceptFileHelper
+   */
   public matchesMimetype(minetype: string, singleAcceptOption: string): boolean {
     if (minetype && singleAcceptOption === 'image/*') {
       return minetype.indexOf('image/') !== -1;
@@ -74,23 +110,59 @@ export class CanAcceptFileHelper {
     return minetype === singleAcceptOption;
   }
 
+  /**
+   * Max size
+   *
+   * @param {File} file
+   * @returns {boolean}
+   * @memberof CanAcceptFileHelper
+   */
   public maxSize(file: File): boolean {
     return this.config.maxSize === 0 || file.size <= this.config.maxSize ? true : false;
   }
 
+  /**
+   * Is mineType
+   *
+   * @param {string} str
+   * @returns {boolean}
+   * @memberof CanAcceptFileHelper
+   */
   public isMimetype(str: string): boolean {
     return str.indexOf('/') !== -1;
   }
 
+  /**
+   * Extract extension
+   *
+   * @param {string} filename
+   * @returns {boolean}
+   * @memberof CanAcceptFileHelper
+   */
   public extractExtension(filename: string): string {
     const match = /\.\w+$/.exec(filename);
     return match && match.length && match[0];
   }
 
+  /**
+   * Normalize Extension
+   *
+   * @param {string} ext
+   * @returns {boolean}
+   * @memberof CanAcceptFileHelper
+   */
   public normalizeExtension(ext: string): string {
     return ext.replace('.', '').toLowerCase();
   }
 
+  /**
+   * Matches Extension
+   *
+   * @param {File} file
+   * @param {string} singleAcceptOption
+   * @returns {boolean}
+   * @memberof CanAcceptFileHelper
+   */
   public matchesExtension(file: File, singleAcceptOption: string): boolean {
     const ext: string = this.extractExtension(file.name) || '';
     const fileExt: string = this.normalizeExtension(ext);

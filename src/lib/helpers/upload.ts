@@ -4,9 +4,12 @@ import * as extractFilesFromDataTransfer from './../utils/extract_files_from_dat
 import { normalizeFile } from './../utils';
 import { EventEmitter } from './eventEmitter';
 import { CanAcceptFileHelper } from './canAcceptFile';
-import { AppConfigInterface, EventInterface, NormalizeFileInterface } from '../interfaces';
+import { OptionsInterface, EventInterface, NormalizeFileInterface } from '../interfaces';
 import { UploadStatusEnum, UploadCodeEnum, UploadControllActionEnum } from '../enum/upload';
 
+/**
+ * Upload files
+ */
 export class Uploads {
   private uploadOptions: filestack.UploadOptions = {};
   private storeUploadOptions: filestack.StoreUploadOptions = {};
@@ -16,23 +19,60 @@ export class Uploads {
   private arrayFilesToken = [];
   private uploadPromise = [];
 
-  constructor(private sdk: filestack.Client, private eventEmitter: EventEmitter, private appConfig: AppConfigInterface) {
-    this.canAcceptFileHelper = new CanAcceptFileHelper(eventEmitter, appConfig, sdk);
+  /**
+   * Constructor
+   *
+   * @param {object} sdk
+   * @param {EventEmitter} eventEmitter
+   * @param {OptionsInterface} options
+   * @returns {void}
+   * @memberof Uploads
+   */
+  constructor(private sdk: filestack.Client, private eventEmitter: EventEmitter, private options: OptionsInterface) {
+    this.canAcceptFileHelper = new CanAcceptFileHelper(eventEmitter, options, sdk);
     this.assainEvents();
   }
 
+  /**
+   * Set Upload Options
+   *
+   * @param {object} uploadOptions
+   * @returns {void}
+   * @memberof Uploads
+   */
   public setUploadOptions(uploadOptions: filestack.UploadOptions) {
     this.uploadOptions = uploadOptions;
   }
 
+  /**
+   * Set Store Upload Options
+   *
+   * @param {object} storeUploadOptions
+   * @returns {void}
+   * @memberof Uploads
+   */
   public setStoreUploadOptions(storeUploadOptions: filestack.StoreUploadOptions) {
     this.storeUploadOptions = storeUploadOptions;
   }
 
+  /**
+   * Set Security Options
+   *
+   * @param {object} security
+   * @returns {void}
+   * @memberof Uploads
+   */
   public setSecurity(security: filestack.Security) {
     this.security = security;
   }
 
+  /**
+   * Upload
+   *
+   * @param {EventInterface} eventData
+   * @returns {void}
+   * @memberof Uploads
+   */
   public upload(eventData: EventInterface) {
     if (eventData.data.dataTransfer) {
       extractFilesFromDataTransfer.default(eventData.data.dataTransfer).then((files: File[]) => {
@@ -41,6 +81,15 @@ export class Uploads {
     }
   }
 
+
+  /**
+   * Upload Files
+   *
+   * @param {File[]} eventFiles
+   * @param {EventInterface} eventData
+   * @returns {void}
+   * @memberof Uploads
+   */
   private uploadFiles(eventFiles: File[], eventData: EventInterface) {
     const sdk: filestack.Client = this.sdk;
     const files: NormalizeFileInterface[] = [];
@@ -49,10 +98,12 @@ export class Uploads {
       files.push(normalizeFile(file));
     });
 
-    if (!this.checkMaxFiles(files) && this.appConfig.failOverMaxFiles) {
+    if (!this.checkMaxFiles(files) && this.options.failOverMaxFiles) {
+      console.log(3);
       this.eventEmitter.emit(UploadStatusEnum.error, { elementId: eventData.elementId, code: UploadCodeEnum.MAX_FILES } as EventInterface);
       return;
-    } else if (!this.checkMaxFiles(files) && !this.appConfig.failOverMaxFiles) {
+    } else if (!this.checkMaxFiles(files) && !this.options.failOverMaxFiles) {
+      console.log(4);
       this.eventEmitter.emit(UploadStatusEnum.error, { elementId: eventData.elementId, code: UploadCodeEnum.MAX_FILES } as EventInterface);
     }
 
@@ -68,9 +119,10 @@ export class Uploads {
 
     if (acceptFiles.length > 0) {
       if (!this.checkMaxFiles(acceptFiles)) {
-        const errorsFiles = acceptFiles.slice(this.appConfig.maxFiles, acceptFiles.length - 1);
-        acceptFiles = acceptFiles.slice(0, this.appConfig.maxFiles);
+        const errorsFiles = acceptFiles.slice(this.options.maxFiles, acceptFiles.length - 1);
+        acceptFiles = acceptFiles.slice(0, this.options.maxFiles);
 
+        console.log(5);
         this.eventEmitter.emit(UploadStatusEnum.error, { elementId: eventData.elementId, data: errorsFiles });
       }
 
@@ -91,6 +143,7 @@ export class Uploads {
             return res;
           })
           .catch(err => {
+            console.log(6);
             this.eventEmitter.emit(UploadStatusEnum.error, { elementId: eventData.elementId, files: [item], error: err } as EventInterface);
 
             return err;
@@ -105,11 +158,27 @@ export class Uploads {
     }
   }
 
+  /**
+   * Max Files
+   *
+   * @param {NormalizeFileInterface[]} files
+   * @returns {boolean}
+   * @memberof Uploads
+   */
   private checkMaxFiles(files: NormalizeFileInterface[]) {
-    return this.appConfig.maxFiles === 0 || files.length <= this.appConfig.maxFiles ? true : false;
+    return this.options.maxFiles === 0 || files.length <= this.options.maxFiles ? true : false;
   }
 
-  private assainUploadCallbacks(uploadOptions: filestack.ClientOptions, eventData, files) {
+  /**
+   * Assain Upload Callbacks
+   *
+   * @param {object} uploadOptions
+   * @param {EventInterface} eventData
+   * @param {NormalizeFileInterface[]} files
+   * @returns {void}
+   * @memberof Uploads
+   */
+  private assainUploadCallbacks(uploadOptions: filestack.ClientOptions, eventData, files: NormalizeFileInterface[]) {
     uploadOptions.onProgress = event => {
       if (this.uploadOptions.onProgress) {
         this.uploadOptions.onProgress(event);
@@ -124,6 +193,14 @@ export class Uploads {
     };
   }
 
+  /**
+   * Assain Upload Events
+   *
+   * @param {EventInterface} eventData
+   * @param {object} token
+   * @returns {void}
+   * @memberof Uploads
+   */
   private assainUploadEvents(eventData, token) {
     this.eventEmitter.on(UploadControllActionEnum.RESUME, (elementId: string, uploadId: string) => {
       this.uploadEventControl(elementId, uploadId, UploadControllActionEnum.RESUME);
@@ -136,6 +213,15 @@ export class Uploads {
     });
   }
 
+  /**
+   * Upload Event Control
+   *
+   * @param {string} elementId
+   * @param {string} uploadId
+   * @param {UploadControllActionEnum} type
+   * @returns {void}
+   * @memberof Uploads
+   */
   private uploadEventControl(elementId: string, uploadId: string, type: UploadControllActionEnum) {
     if (!elementId && !uploadId) {
       return false;
@@ -162,6 +248,15 @@ export class Uploads {
     }
   }
 
+  /**
+   * Upload Event Control
+   *
+   * @param {string} elementId
+   * @param {string} uploadId
+   * @param {UploadControllActionEnum} type
+   * @returns {void}
+   * @memberof Uploads
+   */
   private executeToken(type: UploadControllActionEnum, token) {
     switch (type) {
       case UploadControllActionEnum.PAUSE:
@@ -176,6 +271,12 @@ export class Uploads {
     }
   }
 
+  /**
+   * Listener uploadFiles event
+   *
+   * @returns {void}
+   * @memberof Uploads
+   */
   private assainEvents() {
     this.eventEmitter.on('uploadFiles', (event: EventInterface) => {
       this.upload(event);

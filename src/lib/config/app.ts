@@ -1,6 +1,6 @@
-import { AppConfigInterface } from './../interfaces';
+import { OptionsInterface } from './../interfaces';
 
-export const appConfig: AppConfigInterface = {
+export const appConfig: OptionsInterface = {
   accept: [], // empty array - all files
   maxSize: 0, // 0 - no limit
   maxFiles: 0, // 0 - no limit
