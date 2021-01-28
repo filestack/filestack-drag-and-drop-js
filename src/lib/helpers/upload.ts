@@ -99,11 +99,9 @@ export class Uploads {
     });
 
     if (!this.checkMaxFiles(files) && this.options.failOverMaxFiles) {
-      console.log(3);
       this.eventEmitter.emit(UploadStatusEnum.error, { elementId: eventData.elementId, code: UploadCodeEnum.MAX_FILES } as EventInterface);
       return;
     } else if (!this.checkMaxFiles(files) && !this.options.failOverMaxFiles) {
-      console.log(4);
       this.eventEmitter.emit(UploadStatusEnum.error, { elementId: eventData.elementId, code: UploadCodeEnum.MAX_FILES } as EventInterface);
     }
 
@@ -122,7 +120,6 @@ export class Uploads {
         const errorsFiles = acceptFiles.slice(this.options.maxFiles, acceptFiles.length - 1);
         acceptFiles = acceptFiles.slice(0, this.options.maxFiles);
 
-        console.log(5);
         this.eventEmitter.emit(UploadStatusEnum.error, { elementId: eventData.elementId, data: errorsFiles });
       }
 
@@ -143,7 +140,6 @@ export class Uploads {
             return res;
           })
           .catch(err => {
-            console.log(6);
             this.eventEmitter.emit(UploadStatusEnum.error, { elementId: eventData.elementId, files: [item], error: err } as EventInterface);
 
             return err;

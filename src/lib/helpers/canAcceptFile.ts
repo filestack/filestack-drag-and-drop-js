@@ -41,12 +41,10 @@ export class CanAcceptFileHelper {
     const canAcceptSize = this.maxSize(file);
 
     if (!canAcceptMinetype) {
-      console.log(1);
       this.eventEmitter.emit(UploadStatusEnum.error, { data: file, code: UploadCodeEnum.MINETYPE });
     }
 
     if (!canAcceptSize) {
-      console.log(2);
       this.eventEmitter.emit(UploadStatusEnum.error, { data: file, code: UploadCodeEnum.MAX_FILE_SIZE });
     }
 
