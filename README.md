@@ -53,7 +53,7 @@ constructor(apikey: string | Client, element?: HTMLElement, options?: OptionsInt
 
 | Name        | Type           | Description  |
 |:------------- |:-------------|:-----|
-| apikey      | string \| Client | ApiKey application or instance class Client z filstackSDK |
+| apikey      | string \| Client | Application ApiKey or instance Client from filstackSDK |
 | element (optional)      | HTMElement      | The HTML element that should listen to events |
 | options (optional) | OptionsInterface      | Settings related to uploading |
 | sdkConfig (optional) | Client      | Settings for SDK |
@@ -63,7 +63,7 @@ constructor(apikey: string | Client, element?: HTMLElement, options?: OptionsInt
 |:------------- |:-------------|:-----|
 | elementsHelper      | ElementHelper | Manages elements |
 | eventEmmitrerHelper      | EventEmitter | Manages events |
-| uploadHelper      | Upload | Manages uploading |
+| uploadsHelper      | Uploads | Manages uploading |
 | filstackSdk      | Client | Client form filstackSDK  |
 
 #### Methods 
