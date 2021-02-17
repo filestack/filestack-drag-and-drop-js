@@ -113,7 +113,7 @@ export class Uploads {
       }
     });
 
-    this.eventEmitter.emit(UploadStatusEnum.successReadFile, { elementId: eventData.elementId, files: acceptFiles, url: eventData.data.dataTransfer.getData('text/html') });
+    this.eventEmitter.emit(UploadStatusEnum.successReadFile, { elementId: eventData.elementId, files: acceptFiles });
 
     if (acceptFiles.length > 0) {
       if (!this.checkMaxFiles(acceptFiles)) {

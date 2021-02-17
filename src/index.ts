@@ -154,7 +154,6 @@ export class FilestackDnD {
    */
   private initErrorEvents() {
     this.sdk.on('upload.error', filestackError => {
-      console.log(888)
       this.eventEmitter.emit(UploadStatusEnum.error, { data: filestackError });
     });
   }

@@ -115,7 +115,7 @@ export class ElementsHelper {
    * @returns {void}
    * @memberof ElementsHelper
    */
-  public assignClickEvent(event) {
+  private assignClickEvent(event) {
     const target: HTMLElement = event.target as HTMLElement;
     this.eventEmitter.emit('click', { elementId: target.getAttribute('data-fs-dnd-element-id'), data: event, type: event.type });
 
@@ -153,7 +153,7 @@ export class ElementsHelper {
    * @returns {void}
    * @memberof ElementsHelper
    */
-  public assignDragEvent(event: DragEvent) {
+  private assignDragEvent(event: DragEvent) {
     event.preventDefault();
 
     const target: HTMLElement = event.target as HTMLElement;
@@ -167,7 +167,7 @@ export class ElementsHelper {
    * @returns {void}
    * @memberof ElementsHelper
    */
-  public dropEvent(event) {
+  private dropEvent(event) {
     event.preventDefault();
     event.stopPropagation();
 
