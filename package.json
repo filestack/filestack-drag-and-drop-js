@@ -19,6 +19,7 @@
   "author": "Filestack <filestack.com>",
   "license": "MIT",
   "devDependencies": {
+    "aws-sdk": "^2.806.0",
     "gulp": "^4.0.2",
     "gulp-replace": "^1.0.0",
     "gulp-s3-publish": "^3.0.0",
