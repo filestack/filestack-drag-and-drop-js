@@ -23,6 +23,8 @@
     "gulp-replace": "^1.0.0",
     "gulp-s3-publish": "^3.0.0",
     "gulp-sourcemaps": "^3.0.0",
+    "gulp-sri": "^0.3.1",
+    "gulp-typescript": "^6.0.0-alpha.1",
     "filestack-js": "3.20.0",
     "standard-version": "9.0.0",
     "ts-loader": "^6.2.2",
