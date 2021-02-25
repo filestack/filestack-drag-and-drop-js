@@ -20,10 +20,10 @@ module.exports = {
   },
   devtool: 'eval-source-map',
   output: {
-    publicPath: 'public',
+    publicPath: 'dist',
     library: 'filestackDnD',
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'public'),
+    path: path.resolve(__dirname, 'dist'),
   },
   plugins: [
     new webpack.ProgressPlugin(),
