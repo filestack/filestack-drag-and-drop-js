@@ -1,5 +1,5 @@
 {
-  "name": "filestack-dnd",
+  "name": "filestack-drag-and-drop-js",
   "version": "1.0.0",
   "description": "Official Drag and Drop library for Filestack",
   "main": "index.js",
@@ -20,6 +20,9 @@
   },
   "author": "Filestack <filestack.com>",
   "license": "MIT",
+  "dependencies": {
+    "trash-cli": "^4.0.0"
+  },
   "devDependencies": {
     "aws-sdk": "^2.806.0",
     "filestack-js": "3.20.0",
