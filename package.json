@@ -8,7 +8,9 @@
     "build": "webpack",
     "build:watch": "webpack --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "release": "standard-version"
+    "release": "standard-version",
+    "deploy": "npx gulp publish",
+    "deploy:beta": "npx gulp publish:beta"
   },
   "repository": {
     "type": "git",
@@ -17,6 +19,10 @@
   "author": "Filestack <filestack.com>",
   "license": "MIT",
   "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-replace": "^1.0.0",
+    "gulp-s3-publish": "^3.0.0",
+    "gulp-sourcemaps": "^3.0.0",
     "filestack-js": "3.20.0",
     "standard-version": "9.0.0",
     "ts-loader": "^6.2.2",
