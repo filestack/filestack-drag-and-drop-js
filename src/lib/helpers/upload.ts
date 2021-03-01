@@ -125,7 +125,7 @@ export class Uploads {
 
       acceptFiles.forEach((item: NormalizeFileInterface) => {
         const token = {};
-        this.assainUploadEvents(eventData, token);
+        this.assainUploadEvents();
 
         const cloneUploadOptions = { ...this.uploadOptions };
         this.assainUploadCallbacks(cloneUploadOptions, eventData, [item]);
@@ -192,20 +192,18 @@ export class Uploads {
   /**
    * Assain Upload Events
    *
-   * @param {EventInterface} eventData
-   * @param {object} token
    * @returns {void}
    * @memberof Uploads
    */
-  private assainUploadEvents(eventData, token) {
-    this.eventEmitter.on(UploadControllActionEnum.RESUME, (elementId: string, uploadId: string) => {
-      this.uploadEventControl(elementId, uploadId, UploadControllActionEnum.RESUME);
+  private assainUploadEvents() {
+    this.eventEmitter.on(UploadControllActionEnum.RESUME, (data) => {
+      this.uploadEventControl(data['elementId'], data['uploadId'], UploadControllActionEnum.RESUME);
     });
-    this.eventEmitter.on(UploadControllActionEnum.PAUSE, (elementId: string, uploadId: string) => {
-      this.uploadEventControl(elementId, uploadId, UploadControllActionEnum.PAUSE);
+    this.eventEmitter.on(UploadControllActionEnum.PAUSE, (data) => {
+      this.uploadEventControl(data['elementId'], data['uploadId'], UploadControllActionEnum.PAUSE);
     });
-    this.eventEmitter.on(UploadControllActionEnum.CANCEL, (elementId: string, uploadId: string) => {
-      this.uploadEventControl(elementId, uploadId, UploadControllActionEnum.CANCEL);
+    this.eventEmitter.on(UploadControllActionEnum.CANCEL, (data) => {
+      this.uploadEventControl(data['elementId'], data['uploadId'], UploadControllActionEnum.CANCEL);
     });
   }
 
@@ -254,6 +252,8 @@ export class Uploads {
    * @memberof Uploads
    */
   private executeToken(type: UploadControllActionEnum, token) {
+    console.log('type', type);
+    console.log('token', token);
     switch (type) {
       case UploadControllActionEnum.PAUSE:
         token.resume();

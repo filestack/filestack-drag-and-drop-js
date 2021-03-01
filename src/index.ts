@@ -138,12 +138,12 @@ export class FilestackDnD {
    * Emit event
    *
    * @param {string} event
-   * @param {...any[]} args
+   * @param {object} data
    * @returns {void}
    * @memberof FilestackDnD
    */
-  public emit(event: string, ...args: any[]) {
-    return this.eventEmitterHelper.emit(event, args);
+  public emit(event: string, data) {
+    return this.eventEmitterHelper.emit(event, data);
   }
 
   /**
