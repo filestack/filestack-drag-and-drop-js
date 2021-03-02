@@ -117,10 +117,10 @@ export class Uploads {
 
     if (acceptFiles.length > 0) {
       if (!this.checkMaxFiles(acceptFiles)) {
-        const errorsFiles = acceptFiles.slice(this.options.maxFiles, acceptFiles.length - 1);
+        const errorsFiles = acceptFiles.slice(this.options.maxFiles, acceptFiles.length);
         acceptFiles = acceptFiles.slice(0, this.options.maxFiles);
 
-        this.eventEmitter.emit(UploadStatusEnum.error, { elementId: eventData.elementId, data: errorsFiles });
+        this.eventEmitter.emit(UploadStatusEnum.error, { elementId: eventData.elementId, files: errorsFiles });
       }
 
       acceptFiles.forEach((item: NormalizeFileInterface) => {

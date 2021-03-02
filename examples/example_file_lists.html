@@ -22,7 +22,7 @@
     </div>
     <div class="errors"></div>
     <script src="./../dist/bundle.js"></script>
-
+    
     <script>
         window.onload = function() {
             const API_KEY = 'API_KEY';
@@ -86,7 +86,7 @@
                     li.classList.add('error');
                 } else {
                     let div = document.createElement('div');
-                    div.innerHTML = '-' + e['data']['message'] + ' (' + e['data']['details']['code'] + ' - ' + e['data']['details']['data']['error'] + ')';
+                    div.innerHTML = '-' + e['code'] ? e['code'] : 'Error';
                     errorsBox.append(div);
                 }
             });
