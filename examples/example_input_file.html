@@ -25,7 +25,7 @@
             const filestackClient = filestack.init('API_KEY');
 
             const configFilestackDnD = {
-                acceptMimetype: ['image/*', 'zip'], // default empty array - all files
+                accept: ['image/*', 'zip'], // default empty array - all files
                 maxSize: 0, // default 0 - no limit
                 maxFiles: 2, // default 0 - no limit
                 failOverMaxFiles: false,

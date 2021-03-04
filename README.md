@@ -1,3 +1,28 @@
+<p align="center">
+  <a href="https://www.filestack.com"><img src="https://static.filestackapi.com/filestack.svg?refresh" align="center" width="250" /></a>
+</p>
+<p align="center">
+  <strong>Javascript drag and drop used by filestack</strong>
+</p>
+<hr/>
+
+- [Filestack Drag And Drop](#filestack-drag-and-drop)
+  - [Getting Started](#getting-started)
+  - [Objects:](#objects)
+    - [FilestackDnD](#filestackdnd)
+      - [Construktor](#construktor)
+      - [Properties](#properties)
+      - [Methods](#methods)
+    - [ElementHelper](#elementhelper)
+      - [Properties](#properties-1)
+      - [Methods](#methods-1)
+    - [UploadHelper](#uploadhelper)
+      - [Methods](#methods-2)
+  - [Events](#events)
+      - [How to listen to events](#how-to-listen-to-events)
+      - [How to send events](#how-to-send-events)
+  - [Examples of usage](#examples-of-usage)
+
 # Filestack Drag And Drop
 
 With Filestack-Drag-and-Drop you can easily add drag-and-drop file uploading support to your website. You only need 3 lines of code to make any element on your page able to do that. Filestack-drag-and-drop is a frontend to our JavaScript SDK library.
@@ -19,7 +44,7 @@ Add an element to your page:
 and initialize Filestack Drag and Drop:
 
 ```js
-const client = new filestackDnD.FilestackDnD('API_KEY', document.querySelector('.drop-container'));
+const filestackDnD = new filestackDnD.FilestackDnD('API_KEY', document.querySelector('.drop-container'));
 ```
 
 That's it. Now your page element handles the upload by dropping a file on it.
@@ -28,19 +53,19 @@ That's it. Now your page element handles the upload by dropping a file on it.
 Example initialization with filestack Client:
 ```js
 const filestackClient = filestack.init('API_KEY');
-const client = new filestackDnD.FilestackDnD(filestackClient, document.querySelector('.drop-container'));
+const filestackDnD = new filestackDnD.FilestackDnD(filestackClient, document.querySelector('.drop-container'));
 ```
 
 Example initialization with Options (only image, max size: 1024, max files: 2):
 ```js
 const config = {
-  acceptMimetype: ['image/*'], // default empty array - all files
+  accept: ['image/*'], // default empty array - all files
   maxSize: 1024, // default 0 - no limit
   maxFiles: 2, // default 0 - no limit
   failOverMaxFiles: false, 
 }
 
-const client = new filestackDnD.FilestackDnD('API_KEY', document.querySelector('.drop-container'), config);
+const filestackDnD = new filestackDnD.FilestackDnD('API_KEY', document.querySelector('.drop-container'), config);
 ```
 
 Example initialization with sdkConfig:
@@ -53,13 +78,13 @@ const sdkConfig = {
   }
 }
 
-const client = new filestackDnD.FilestackDnD('API_KEY', document.querySelector('.drop-container'), null, null, testConfig);
+const filestackDnD = new filestackDnD.FilestackDnD('API_KEY', document.querySelector('.drop-container'), null, null, testConfig);
 ```
 
 ## Objects:
 
 ### FilestackDnD
-#### Construktor: 
+#### Construktor
 ```js
 constructor(apikey: string | Client, element?: HTMLElement, options?: OptionsInterface, sdkConfig?: ClientOptions)
 ```
@@ -117,9 +142,9 @@ constructor(apikey: string | Client, element?: HTMLElement, options?: OptionsInt
 ## Events
 You can interact programmatically with Filestack Drag and DropI using events. 
 
-#### How to listen to events:
+#### How to listen to events
 ```js
-client.on('eventName', (e) => {console.log(e)});
+filestackDnD.on('eventName', (e) => {console.log(e)});
 ```
 
 | Name        | Description           | Return  |
@@ -134,7 +159,7 @@ client.on('eventName', (e) => {console.log(e)});
 
 #### How to send events
 ```js
-client.emit('eventName', { elementId: null, fileId: id });
+filestackDnD.emit('eventName', { elementId: null, fileId: id });
 ```
 * elementId: string - This is the identifier of the HTML element. A unique attribute is added: "data-fs-dnd-element-id" To every element added to DragAndDrop.
 * fileId: string - Each file has its own unique Id.
@@ -150,7 +175,7 @@ If we send only fileId the event will be fired only for the specific file
 | cancel      | Aborts file upload |
 
 
-## Examples of usage:
+## Examples of usage
 
 Take a look at the examples folder as well. We show various use cases there:
 
