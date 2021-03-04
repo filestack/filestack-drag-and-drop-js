@@ -43,6 +43,19 @@ const config = {
 const client = new filestackDnD.FilestackDnD('API_KEY', document.querySelector('.drop-container'), config);
 ```
 
+Example initialization with sdkConfig:
+```js
+const sdkConfig = {
+  cname: 'cname_test',
+  security: {
+      policy : 'policy_test',
+      signature: 'signature_test'
+  }
+}
+
+const client = new filestackDnD.FilestackDnD('API_KEY', document.querySelector('.drop-container'), null, null, testConfig);
+```
+
 ## Objects:
 
 ### FilestackDnD
@@ -53,11 +66,7 @@ constructor(apikey: string | Client, element?: HTMLElement, options?: OptionsInt
 
 | Name        | Type           | Description  |
 |:------------- |:-------------|:-----|
-<<<<<<< HEAD
-| apikey      | string \| Client | application ApiKey or instance Client from filstackSDK |
-=======
 | apikey      | string \| Client | Application ApiKey or instance Client from filstackSDK |
->>>>>>> 1a72646ef234524c9f278bca99c5223314a46be5
 | element (optional)      | HTMElement      | The HTML element that should listen to events |
 | options (optional) | OptionsInterface      | Settings related to uploading |
 | sdkConfig (optional) | Client      | Settings for SDK |

@@ -252,11 +252,9 @@ export class Uploads {
    * @memberof Uploads
    */
   private executeToken(type: UploadControllActionEnum, token) {
-    console.log('type', type);
-    console.log('token', token);
     switch (type) {
       case UploadControllActionEnum.PAUSE:
-        token.resume();
+        token.pause();
         break;
       case UploadControllActionEnum.RESUME:
         token.resume();
