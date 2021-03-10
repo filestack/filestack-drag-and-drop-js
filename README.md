@@ -2,15 +2,24 @@
   <a href="https://www.filestack.com"><img src="https://static.filestackapi.com/filestack.svg?refresh" align="center" width="250" /></a>
 </p>
 <p align="center">
+  <a href="https://npmjs.com/package/filestack-js"><img src="https://img.shields.io/npm/v/filestack-js.svg" /></a>
+
+  <img src="https://img.shields.io/badge/module%20formats-umd%2C%20esm-green.svg" />
+  <br/>
+  <img src="https://badges.herokuapp.com/browsers?labels=none&googlechrome=latest&firefox=latest&microsoftedge=latest&safari=latest&iphone=latest" />
+</p>
+<p align="center">
   <strong>Javascript drag and drop used by filestack</strong>
 </p>
 <hr/>
 
 - [Filestack Drag And Drop](#filestack-drag-and-drop)
   - [Getting Started](#getting-started)
+    - [UMD module](#umd-module)
+    - [SRI](#sri)
   - [Objects:](#objects)
     - [FilestackDnD](#filestackdnd)
-      - [Construktor](#construktor)
+      - [Constructor](#constructor)
       - [Properties](#properties)
       - [Methods](#methods)
     - [ElementHelper](#elementhelper)
@@ -22,12 +31,15 @@
       - [How to listen to events](#how-to-listen-to-events)
       - [How to send events](#how-to-send-events)
   - [Examples of usage](#examples-of-usage)
+  - [Contributing](#contributing)
 
 # Filestack Drag And Drop
 
 With Filestack-Drag-and-Drop you can easily add drag-and-drop file uploading support to your website. You only need 3 lines of code to make any element on your page able to do that. Filestack-drag-and-drop is a frontend to our JavaScript SDK library.
 
 ## Getting Started
+
+### UMD module
 
 To integrate FIlestack-Drag-and-Drop with your web application simply include our UMD module in your code:
 
@@ -81,10 +93,28 @@ const sdkConfig = {
 const filestackDnD = new filestackDnD.FilestackDnD('API_KEY', document.querySelector('.drop-container'), null, null, testConfig);
 ```
 
+### SRI
+Subresource Integrity (SRI) is a security feature that enables browsers to verify that files they fetch (for example, from a CDN) are delivered without unexpected manipulation. It works by allowing you to provide a cryptographic hash that a fetched file must match
+
+To obtain sri hashes for filestack-tools library check manifest.json file on CDN:
+
+```js
+@todo
+https://static.filestackapi.com/filestack-tools/{LIBRARY_VERSION}/manifest.json
+```
+
+```js
+@todo
+<script src="//static.filestackapi.com/filestack-tools/{LIBRARY_VERSION}/filestack-tools.min.js" integrity="{FILE_HASH}" crossorigin="anonymous"></script>
+```
+
+Where {LIBRARY_VERSION} is currently used library version and {FILE_HASH} is one of the hashes from integrity field in manifest.json file
+
+
 ## Objects:
 
 ### FilestackDnD
-#### Construktor
+#### Constructor
 ```js
 constructor(apikey: string | Client, element?: HTMLElement, options?: OptionsInterface, sdkConfig?: ClientOptions)
 ```
@@ -94,15 +124,36 @@ constructor(apikey: string | Client, element?: HTMLElement, options?: OptionsInt
 | apikey      | string \| Client | Application ApiKey or instance Client from filstackSDK |
 | element (optional)      | HTMElement      | The HTML element that should listen to events |
 | options (optional) | OptionsInterface      | Settings related to uploading |
-| sdkConfig (optional) | Client      | Settings for SDK |
+| sdkConfig (optional) | Client | Settings for SDK |
 
 #### Properties
 | Name        | Type           | Description  |
 |:------------- |:-------------|:-----|
-| elementsHelper      | ElementHelper | Manages elements |
+| elementsHelper      | [ElementHelper](#elementhelper) | Manages elements |
 | eventEmmitrerHelper      | EventEmitter | Manages events |
-| uploadsHelper      | Uploads | Manages uploading |
-| filstackSdk      | Client | Client form filstackSDK  |
+| uploadsHelper      | [UploadHelper](#uploadhelper) | Manages uploading |
+| filstackSdk      | <a href="https://filestack.github.io/filestack-js/classes/client.html">Client</a> | Client form filstackSDK |
+
+Example:
+Use elementsHelper - set new HTMLElement:
+```js
+filestackDnD.elementHelper.setElement(document.querySelector('.someElement'))
+```
+
+Use eventEmmitrerHelper - listen to events:
+```js
+filestackDnD.eventEmmitrerHelper.on('dragover', (res) => {console.log(e)})
+```
+
+Use uploadsHelper - set Upload Options:
+```js
+filestackDnD.uploadsHelper.setUploadOptions()
+```
+
+Use filstackSdk - open picker:
+```js
+filestackDnD.filstackSdk.picker(options).open();
+```
 
 #### Methods 
 | Name        | Parameters           | Description  | Return |
@@ -140,7 +191,7 @@ constructor(apikey: string | Client, element?: HTMLElement, options?: OptionsInt
 
 
 ## Events
-You can interact programmatically with Filestack Drag and DropI using events. 
+You can interact programmatically with Filestack Drag and Drop
 
 #### How to listen to events
 ```js
@@ -151,11 +202,11 @@ filestackDnD.on('eventName', (e) => {console.log(e)});
 |:------------- |:-------------|:-----|
 | successReadFile      | Reading files through browsers | SuccessReadFileInterface |
 | progress      | Checking the progress | ProgressInterface |
-| dragover      | Event triggered when an object is dragged over an element added to Drag and Drop | @todo |
-| dragleave      | Event triggered when the user moves the cursor outside a Drag and Drop supported item | @todo |
-| drop      | Event triggered when user drops a file over an item  | @todo |
-| uploadFileFinish      | Event triggered when uploading a file is successful | @todo |
-| error      | Event triggered when there are some errors e.g. wrong file format, problems with uploading etc | @todo |
+| dragover      | Event triggered when an object is dragged over an element added to Drag and Drop | { elementId: string, data: DragEvent } |
+| dragleave      | Event triggered when the user moves the cursor outside a Drag and Drop supported item | { elementId: string, data: DragEvent } |
+| drop      | Event triggered when user drops a file over an item  | { elementId: string, data: DragEvent } |
+| uploadFileFinish      | Event triggered when uploading a file is successful | { elementId: string, files: NormalizeFileInterface[], data: res } |
+| error      | Event triggered when there are some errors e.g. wrong file format, problems with uploading etc | EventInterface |
 
 #### How to send events
 ```js
@@ -177,12 +228,22 @@ If we send only fileId the event will be fired only for the specific file
 
 ## Examples of usage
 
-Take a look at the examples folder as well. We show various use cases there:
-
+Take a look at the examples folder as well. We show various use cases there (example_simple.html):
+<br>
+<br>
+<img src="https://cdn.filestackcontent.com/Los1dmb9RbyIqEeZN0zE" width="500px">
  
 
-Multiple drag and drop elements on the page:
+Multiple drag and drop elements on the page (example_multi_pane.html):
+<br>
+<br>
+<img src="https://cdn.filestackcontent.com/r61Ujd9JRxawK56k0pYQ" width="500px">
 
-List of uploaded files with progress:
+List of uploaded files with progress (example_file_lists.html):
+<br>
+<br>
+<img src="https://cdn.filestackcontent.com/C8FelivqSzSnF8ifQLoa" width="500px">
 
 
+## Contributing
+We follow the <a href="https://conventionalcommits.org/">conventional commits</a> specification to ensure consistent commit messages and changelog formatting.

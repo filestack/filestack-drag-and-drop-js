@@ -157,7 +157,7 @@ export class ElementsHelper {
     event.preventDefault();
 
     const target: HTMLElement = event.target as HTMLElement;
-    this.eventEmitter.emit(event.type, { elementId: target.getAttribute('data-fs-dnd-element-id'), data: event, type: event.type });
+    this.eventEmitter.emit(event.type, { elementId: target.getAttribute('data-fs-dnd-element-id'), data: event });
   }
 
   /**
