@@ -44,7 +44,7 @@ With Filestack-Drag-and-Drop you can easily add drag-and-drop file uploading sup
 To integrate FIlestack-Drag-and-Drop with your web application simply include our UMD module in your code:
 
 ```html
-<script src="@todo add link"></script>
+<script src="//static.filestackapi.com/filestack-drag-and-drop-js/{MAJOR_VERSION}.x.x/filestack-drag-and-drop.min.js"></script>
 ```
 
 Add an element to your page:
@@ -100,12 +100,12 @@ To obtain sri hashes for filestack-tools library check manifest.json file on CDN
 
 ```js
 @todo
-https://static.filestackapi.com/filestack-tools/{LIBRARY_VERSION}/manifest.json
+https://static.filestackapi.com/filestack-drag-and-drop-js/{LIBRARY_VERSION}/manifest.json
 ```
 
 ```js
 @todo
-<script src="//static.filestackapi.com/filestack-tools/{LIBRARY_VERSION}/filestack-tools.min.js" integrity="{FILE_HASH}" crossorigin="anonymous"></script>
+<script src="//static.filestackapi.com/filestack-drag-and-drop-js/{LIBRARY_VERSION}/filestack-drag-and-drop.min.js" integrity="{FILE_HASH}" crossorigin="anonymous"></script>
 ```
 
 Where {LIBRARY_VERSION} is currently used library version and {FILE_HASH} is one of the hashes from integrity field in manifest.json file
