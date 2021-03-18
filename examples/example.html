@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title></title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="drop-container">Drag and Drop</div>
+        <progress class="uploadProgres" value="0" max="100" data-label="0%"></progress>
+        <div class="button-container">
+            <button onClick="pause()">Pause</button>
+            <button onClick="resume()">Resume</button>
+            <button onClick="cancel()">Cancel</button>
+        </div>
+    </div>
+
+    <script src="https://static.filestackapi.com/filestack-js/3.x.x/filestack.min.js" crossorigin="anonymous"></script>
+    <script src="./../dist/bundle.js"></script>
+
+    <script>
+        window.onload = function() {
+            const dropContainer = document.querySelector('.drop-container');
+            const uploadProgres = document.querySelector('.uploadProgres');
+            const filesProgress = document.querySelector('.filesProgress');
+
+            const filestackClient = filestack.init('API_KEY');
+
+            const configFilestackDnD = {
+                accept: ['image/*', 'zip'], // default empty array - all files
+                maxSize: 0, // default 0 - no limit
+                maxFiles: 2, // default 0 - no limit
+                failOverMaxFiles: true, // default false - if upload files > maxFiles - upload only first ${maxFiles} files
+            }
+            // const client = new filestackDnD.FilestackDnD('API_KEY', dropContainer, configFsDnD, clientConfig); // API_KEY
+            const client = new filestackDnD.init(filestackClient, dropContainer, configFilestackDnD); // inject filestackClient
+
+            //@todo
+            client.on('progress', (e) => {
+                console.log('progress', e)
+                uploadProgres.value = e.data.totalPercent;
+                uploadProgres.setAttribute('data-label', e.data.totalPercent + '%');
+                uploadProgres.classList.add('onProgress');
+                return;
+            });
+
+            client.on('finish', (e) => {
+                console.log('finish', e)
+                uploadProgres.classList.remove('onProgress');
+                uploadProgres.classList.add('finish');
+                return;
+            });
+
+            client.on('error', (e) => {
+                console.log('error', e)
+            });
+
+            pause = function() {
+                client.emit('pause', { elementId: dropContainer.getAttribute('data-fs-dnd-element-id') });
+            }
+
+            resume = function() {
+                client.emit('resume', { elementId: dropContainer.getAttribute('data-fs-dnd-element-id') });
+            }
+
+            cancel = function() {
+                client.emit('cancel', { elementId: dropContainer.getAttribute('data-fs-dnd-element-id') });
+            }
+        };
+    </script>
+</body>
+
+</html>

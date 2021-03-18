@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title></title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div" class="drop-container">
+            <img src="./assets/cloud_upload-24px.svg" alt="Kiwi standing on oval">
+            <span><b>Choose a file</b> or drag it here.</span>
+        </div>
+    </div>
+    <div>
+        <ul class="list">
+        </ul>
+    </div>
+    <div class="errors"></div>
+    <script src="./../dist/bundle.js"></script>
+    
+    <script>
+        window.onload = function() {
+            const API_KEY = 'API_KEY';
+            const dropContainer = document.querySelector('.drop-container');
+
+            const client = new filestackDnD.init(API_KEY, dropContainer, {failOverMaxFiles: false, maxFiles: 4});
+            const list = document.querySelector('.list');
+            const errorsBox = document.querySelector('.errors');
+
+            client.on('successReadFile', (e) => {
+                let files = e['files'];
+                
+                if(files.length > 0) {
+                    files.forEach(file => {
+                        addFileToList(file);
+                    })
+                } 
+            });
+
+            pause = function(id) {
+                client.emit('pause', { elementId: null, fileId: id });
+            }
+
+            resume = function(id) {
+                client.emit('resume', { elementId: null,  fileId: id });
+            }
+
+            cancel = function(id) {
+                client.emit('cancel', { elementId: null, fileId: id });
+            }
+
+            client.on('progress', (e) => {
+                updateFileList(e.files[0].uploadId, e.data.totalPercent);
+            });
+
+            client.on('dragover', (e) => {
+                let container = document.querySelector('.container');
+                container.classList.add('hover');
+            });
+
+            client.on('dragleave', (e) => {
+                let container = document.querySelector('.container');
+                container.classList.remove('hover');
+            });
+
+            client.on('drop', (e) => {
+                let container = document.querySelector('.container');
+                container.classList.remove('hover');
+            });
+
+            client.on('uploadFileFinish', (e) => {
+                let li = document.querySelector(`[data-id="${e.files[0]['uploadId']}"]`);
+                li.classList.add('success');
+            });
+
+            client.on('error', (e) => {
+                errorsBox.classList.add('active');
+                
+                if(e['files']) {
+                    let li = document.querySelector(`[data-id="${e.files[0]['uploadId']}"]`);
+                    li.classList.add('error');
+                } else {
+                    let div = document.createElement('div');
+                    div.innerHTML = '-' + e['code'] ? e['code'] : 'Error';
+                    errorsBox.append(div);
+                }
+            });
+
+            function addFileToList(file) {
+                list.prepend(generateListElement(file));
+            }
+
+            function updateFileList(fileId, totalPercent) {
+                let li = document.querySelector(`[data-id="${fileId}"]`);
+                let progress = li.querySelector('progress');
+                let percent = li.querySelector('.percent');
+
+                percent.innerHTML = totalPercent + '%';
+                progress.setAttribute('value', totalPercent);
+            }
+
+            function generateListElement(file) {
+                let li = document.createElement('li');
+                li.setAttribute('data-name', file.originalFile.name);
+                li.setAttribute('data-id', file.uploadId);
+                li.onclick = pause(file.uploadId);
+
+                let div = document.createElement('div');
+                let span = document.createElement('span');
+                let spanPercent = document.createElement('span');
+                
+                // filename and percent
+                spanPercent.classList.add('percent');
+                spanPercent.innerHTML = '0%'
+                span.innerHTML = file.originalFile.name + ' - ';
+                span.append(spanPercent);
+                div.append(span);
+
+                // progress bar
+                let progress = document.createElement('progress');
+                progress.classList.add(['uploadProgres', 'onProgress']);
+                progress.setAttribute('value', 0);
+                progress.setAttribute('max', 100);
+                div.append(progress);
+                li.append(div);
+                
+                let fileTypeImage = document.createElement('img');
+
+                li.prepend(addFileTypeImage(fileTypeImage, file));
+
+                return li;
+            }
+
+            function addFileTypeImage(imgElement, file) {
+                if(file.mimetype.indexOf('image/') !== -1) {
+                    const reader = new FileReader();
+
+                    reader.addEventListener("load", function () {
+                        imgElement.style.backgroundImage = `url(${reader.result})`;
+                        imgElement.style.backgroundRepeat = `no-repeat`;
+                        imgElement.style.backgroundSize = `contain`;
+                        imgElement.style.backgroundPosition = `center center`;
+
+                        return imgElement;
+                    }, false);
+
+                    if (file) {
+                        reader.readAsDataURL(file.originalFile);
+                    }
+                } else if (file.mimetype.indexOf('video/') !== -1) {
+                    imgElement.style.background = `url(./assets/baseline_videocam_black_18dp.png) no-repeat center center`;
+                } else if (file.mimetype.indexOf('audio/') !== -1) {
+                    imgElement.style.background = `url(./assets/baseline_audiotrack_black_18dp.png) no-repeat center center`;
+                } else if (file.mimetype.indexOf('application/') !== -1) {
+                    imgElement.style.background = `url(./assets/baseline_settings_applications_black_18dp.png) no-repeat center center`;
+                } else if (file.mimetype.indexOf('text/') !== -1) {
+                    imgElement.style.background = `url(./assets/baseline_text_snippet_black_18dp.png) no-repeat center center`;
+                } else {
+                    imgElement.style.background = `url(./assets/baseline_attach_file_black_18dp.png) no-repeat center center`;
+                }
+
+                return imgElement;
+            }
+        };
+    </script>
+</body>
+
+</html>

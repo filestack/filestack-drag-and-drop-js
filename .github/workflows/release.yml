@@ -1,0 +1,69 @@
+name: filestack-drag-and-drop-js
+on:
+  push:
+    branches: [ feature/initial ]
+  create:
+    tags:
+      - v*
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    # - uses: voxmedia/github-action-slack-notify-build@v1
+    #   with:
+    #     channel: team-charlie
+    #     status: STARTED
+    #     color: good
+    #   env:
+    #     SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+    - uses: actions/checkout@v2
+    - name: Setup repository env
+      uses: actions/setup-node@v1
+      with:
+        node-version: '14.x'
+        registry-url: "https://registry.npmjs.org"
+        scope: '@filestack'
+    - name: Install deps
+      run: npm install
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.GH_REGISTRY_TOKEN }}
+    - name: Build code
+      run: npm run build
+    - name: Publush to NPM (only on tag)
+      if: startsWith(github.ref, 'refs/tags/') && success()
+      run: npm publish --access public
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    - name: Publish package to cdn
+      run: npm run deploy
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ${{ secrets.AWS_REGION }}
+    # - name: Build docs
+    #   run: npm run docs
+    # - name: Deploy docs
+    #   uses: crazy-max/ghaction-github-pages@v2
+    #   with:
+    #       target_branch: gh-pages
+    #       build_dir: docs
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # - name: Notify slack success
+    #   if: success()
+    #   env:
+    #     SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+    #   uses: voxmedia/github-action-slack-notify-build@v1
+    #   with:
+    #     channel: team-charlie
+    #     status: SUCCESS
+    #     color: good
+    # - name: Notify slack fail
+    #   if: failure()
+    #   env:
+    #     SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+    #   uses: voxmedia/github-action-slack-notify-build@v1
+    #   with:
+    #     channel: team-charlie
+    #     status: FAILED
+    #     color: danger

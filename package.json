@@ -1,0 +1,45 @@
+{
+  "name": "filestack-drag-and-drop-js",
+  "version": "1.0.0",
+  "description": "Official Drag and Drop library for Filestack",
+  "main": "index.js",
+  "scripts": {
+    "serve": "webpack-dev-server",
+    "build": "webpack",
+    "build:watch": "webpack --watch",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "release": "standard-version",
+    "deploy": "npx gulp publish",
+    "deploy:beta": "npx gulp publish:beta",
+    "docs": "npx trash public/docs && typedoc --exclude './node_modules/**' --exclude './tests/**' --exclude './src/helpers/**' --exclude './src/assets/**' --exclude './src/index.ts' ./src",
+    "docs:publish": "npm run docs && gh-pages -d build/docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "Filestack <filestack.com>",
+  "license": "MIT",
+  "dependencies": {
+    "trash-cli": "^4.0.0"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.806.0",
+    "filestack-js": "3.20.0",
+    "git-rev-sync": "^3.0.1",
+    "gulp": "^4.0.2",
+    "gulp-replace": "^1.0.0",
+    "gulp-s3-publish": "^3.0.0",
+    "gulp-sourcemaps": "^3.0.0",
+    "gulp-sri": "^0.3.1",
+    "gulp-typescript": "^6.0.0-alpha.1",
+    "standard-version": "9.0.0",
+    "ts-loader": "^6.2.2",
+    "typedoc": "^0.20.19",
+    "typescript": "^3.8.3",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3",
+    "webpack-stream": "^6.1.1"
+  }
+}
