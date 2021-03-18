@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title></title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <input type="button" class="drop-container" />
+    </div>
+
+    <script src="https://static.filestackapi.com/filestack-js/3.x.x/filestack.min.js" crossorigin="anonymous"></script>
+    <script src="./../dist/bundle.js"></script>
+
+    <script>
+        window.onload = function() {
+            const dropContainer = document.querySelector('.drop-container');
+            const filesProgress = document.querySelector('.filesProgress');
+
+            const filestackClient = filestack.init('API_KEY');
+
+            const configFilestackDnD = {
+                accept: ['image/*', 'zip'], // default empty array - all files
+                maxSize: 0, // default 0 - no limit
+                maxFiles: 2, // default 0 - no limit
+                failOverMaxFiles: false,
+            }
+            // const client = new filestackDnD.FilestackDnD('API_KEY', dropContainer, configFsDnD, clientConfig); // API_KEY
+            const client = new filestackDnD.init(filestackClient, dropContainer, configFilestackDnD); // inject filestackClient
+
+            client.on('progress', (e) => {
+                console.log('progress', e)
+                return;
+            });
+
+            client.on('finish', (e) => {
+                console.log('finish', e)
+                return;
+            });
+
+            client.on('error', (e) => {
+                console.log('error', e)
+            });
+        };
+    </script>
+</body>
+
+</html>
