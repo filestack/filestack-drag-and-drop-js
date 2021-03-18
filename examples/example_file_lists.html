@@ -28,7 +28,7 @@
             const API_KEY = 'API_KEY';
             const dropContainer = document.querySelector('.drop-container');
 
-            const client = new filestackDnD.FilestackDnD(API_KEY, dropContainer, {failOverMaxFiles: false, maxFiles: 4});
+            const client = new filestackDnD.init(API_KEY, dropContainer, {failOverMaxFiles: false, maxFiles: 4});
             const list = document.querySelector('.list');
             const errorsBox = document.querySelector('.errors');
 

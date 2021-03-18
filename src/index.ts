@@ -1,4 +1,4 @@
-import { Client, ClientOptions, UploadOptions, init } from 'filestack-js';
+import { Client, ClientOptions, UploadOptions, init as initSdk } from 'filestack-js';
 // import loader from 'filestack-loader';
 
 import { ElementsHelper, EventEmitter, Uploads } from './lib/helpers';
@@ -43,7 +43,7 @@ export class FilestackDnD {
       //       this.init(options);
       //     });
 
-      this.sdk = init(apikey, sdkConfig);
+      this.sdk = initSdk(apikey, sdkConfig);
       this.init(options);
     } else {
       this.sdk = apikey;
@@ -158,3 +158,7 @@ export class FilestackDnD {
     });
   }
 }
+
+export function init(apikey: string | Client, element?: HTMLElement, options?: OptionsInterface, sdkConfig?: ClientOptions){
+  return new FilestackDnD(apikey, element, options, sdkConfig);
+};

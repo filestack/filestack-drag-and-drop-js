@@ -31,7 +31,7 @@
                 failOverMaxFiles: false,
             }
             // const client = new filestackDnD.FilestackDnD('API_KEY', dropContainer, configFsDnD, clientConfig); // API_KEY
-            const client = new filestackDnD.FilestackDnD(filestackClient, dropContainer, configFilestackDnD); // inject filestackClient
+            const client = new filestackDnD.init(filestackClient, dropContainer, configFilestackDnD); // inject filestackClient
 
             client.on('progress', (e) => {
                 console.log('progress', e)

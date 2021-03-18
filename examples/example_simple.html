@@ -17,7 +17,7 @@
     <script src="./../dist/bundle.js"></script>
     <script>
         window.onload = function() {
-            const client = new filestackDnD.FilestackDnD('API_KEY', document.querySelector('.drop-container'));
+            const client = new filestackDnD.init('API_KEY', document.querySelector('.drop-container'));
             
             client.on('progress', (e) => {
                 console.log('progress', e)

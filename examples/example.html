@@ -38,7 +38,7 @@
                 failOverMaxFiles: true, // default false - if upload files > maxFiles - upload only first ${maxFiles} files
             }
             // const client = new filestackDnD.FilestackDnD('API_KEY', dropContainer, configFsDnD, clientConfig); // API_KEY
-            const client = new filestackDnD.FilestackDnD(filestackClient, dropContainer, configFilestackDnD); // inject filestackClient
+            const client = new filestackDnD.init(filestackClient, dropContainer, configFilestackDnD); // inject filestackClient
 
             //@todo
             client.on('progress', (e) => {

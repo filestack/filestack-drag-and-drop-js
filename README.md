@@ -56,7 +56,7 @@ Add an element to your page:
 and initialize Filestack Drag and Drop:
 
 ```js
-const filestackDnD = new filestackDnD.FilestackDnD('API_KEY', document.querySelector('.drop-container'));
+const filestackDnD = new filestackDnD.init('API_KEY', document.querySelector('.drop-container'));
 ```
 
 That's it. Now your page element handles the upload by dropping a file on it.
@@ -65,7 +65,7 @@ That's it. Now your page element handles the upload by dropping a file on it.
 Example initialization with filestack Client:
 ```js
 const filestackClient = filestack.init('API_KEY');
-const filestackDnD = new filestackDnD.FilestackDnD(filestackClient, document.querySelector('.drop-container'));
+const filestackDnD = new filestackDnD.init(filestackClient, document.querySelector('.drop-container'));
 ```
 
 Example initialization with Options (only image, max size: 1024, max files: 2):
@@ -77,7 +77,7 @@ const config = {
   failOverMaxFiles: false, 
 }
 
-const filestackDnD = new filestackDnD.FilestackDnD('API_KEY', document.querySelector('.drop-container'), config);
+const filestackDnD = new filestackDnD.init('API_KEY', document.querySelector('.drop-container'), config);
 ```
 
 Example initialization with sdkConfig:
@@ -90,7 +90,7 @@ const sdkConfig = {
   }
 }
 
-const filestackDnD = new filestackDnD.FilestackDnD('API_KEY', document.querySelector('.drop-container'), null, null, testConfig);
+const filestackDnD = new filestackDnD.init('API_KEY', document.querySelector('.drop-container'), null, null, testConfig);
 ```
 
 ### SRI
