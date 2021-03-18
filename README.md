@@ -4,7 +4,7 @@
 <p align="center">
   <a href="https://npmjs.com/package/filestack-js"><img src="https://img.shields.io/npm/v/filestack-js.svg" /></a>
 
-  <img src="https://img.shields.io/badge/module%20formats-umd%2C%20esm-green.svg" />
+  <img src="https://img.shields.io/badge/module%20formats-umd%2C%20sri-green.svg" />
   <br/>
   <img src="https://badges.herokuapp.com/browsers?labels=none&googlechrome=latest&firefox=latest&microsoftedge=latest&safari=latest&iphone=latest" />
 </p>
@@ -99,12 +99,10 @@ Subresource Integrity (SRI) is a security feature that enables browsers to verif
 To obtain sri hashes for filestack-tools library check manifest.json file on CDN:
 
 ```js
-@todo
 https://static.filestackapi.com/filestack-drag-and-drop-js/{LIBRARY_VERSION}/manifest.json
 ```
 
 ```js
-@todo
 <script src="//static.filestackapi.com/filestack-drag-and-drop-js/{LIBRARY_VERSION}/filestack-drag-and-drop.min.js" integrity="{FILE_HASH}" crossorigin="anonymous"></script>
 ```
 
