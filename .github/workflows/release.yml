@@ -1,7 +1,7 @@
 name: filestack-drag-and-drop-js
 on:
   push:
-    branches: [ feature/initial ]
+    branches: [ develop ]
   create:
     tags:
       - v*
@@ -49,6 +49,7 @@ jobs:
     #       build_dir: docs
     #   env:
     #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     # - name: Notify slack success
     #   if: success()
     #   env:
