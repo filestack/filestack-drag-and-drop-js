@@ -2,7 +2,7 @@
   "name": "filestack-drag-and-drop-js",
   "version": "1.0.0",
   "description": "Official Drag and Drop library for Filestack",
-  "main": "index.js",
+  "main": "filstack-dnd.js",
   "scripts": {
     "serve": "webpack-dev-server",
     "build": "webpack",

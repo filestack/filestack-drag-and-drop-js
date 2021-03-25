@@ -22,7 +22,7 @@ module.exports = {
   output: {
     publicPath: 'dist',
     library: 'filestackDnD',
-    filename: 'bundle.js',
+    filename: 'filstack-dnd.js',
     path: path.resolve(__dirname, 'dist/browser'),
   },
   plugins: [
