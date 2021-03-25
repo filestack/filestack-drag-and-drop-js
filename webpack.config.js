@@ -22,8 +22,8 @@ module.exports = {
   output: {
     publicPath: 'dist',
     library: 'filestackDnD',
-    filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist'),
+    filename: 'filstack-dnd.js',
+    path: path.resolve(__dirname, 'dist/browser'),
   },
   plugins: [
     new webpack.ProgressPlugin(),
