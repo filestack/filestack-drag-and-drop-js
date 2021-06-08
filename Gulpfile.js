@@ -56,7 +56,7 @@ const uploadFile = (version, CacheControl) => {
       CacheControl: `max-age=${CacheControl * 86400}`,
     },
     uploadPath: `${deployPath}/${version}`,
-    dryRun: ['develop', 'master'].indexOf(currentBranch) > -1 ? false : true,
+    dryRun: ['develop', 'main'].indexOf(currentBranch) > -1 ? false : true,
   })
 }
 
