@@ -128,7 +128,7 @@ constructor(apikey: string | Client, element?: HTMLElement, options?: OptionsInt
 | Name        | Type           | Description  |
 |:------------- |:-------------|:-----|
 | elementsHelper      | [ElementHelper](#elementhelper) | Manages elements |
-| eventEmmitrerHelper      | EventEmitter | Manages events |
+| eventEmitterHelper      | EventEmitter | Manages events |
 | uploadsHelper      | [UploadHelper](#uploadhelper) | Manages uploading |
 | filstackSdk      | <a href="https://filestack.github.io/filestack-js/classes/client.html">Client</a> | Client form filstackSDK |
 
@@ -138,9 +138,9 @@ Use elementsHelper - set new HTMLElement:
 filestackDnD.elementHelper.setElement(document.querySelector('.someElement'))
 ```
 
-Use eventEmmitrerHelper - listen to events:
+Use eventEmitterHelper - listen to events:
 ```js
-filestackDnD.eventEmmitrerHelper.on('dragover', (res) => {console.log(e)})
+filestackDnD.eventEmitterHelper.on('dragover', (res) => {console.log(e)})
 ```
 
 Use uploadsHelper - set Upload Options:
