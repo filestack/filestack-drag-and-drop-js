@@ -12,7 +12,8 @@
     "deploy": "npx gulp publish",
     "deploy:beta": "npx gulp publish:beta",
     "docs": "npx trash public/docs && typedoc --exclude './node_modules/**' --exclude './tests/**' --exclude './src/helpers/**' --exclude './src/assets/**' --exclude './src/index.ts' ./src",
-    "docs:publish": "npm run docs && gh-pages -d build/docs"
+    "docs:publish": "npm run docs && gh-pages -d build/docs",
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
