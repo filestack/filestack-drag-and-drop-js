@@ -136,4 +136,4 @@ gulp.task('publish:version', (done) => {
 gulp.task('publish', gulp.series('sri', 'publish:beta', 'publish:version', 'publish:latest'));
 gulp.task('build:webpack', gulp.series(['build:webpack:prod']));
 gulp.task('build:typescript', gulp.series(['build:clean', 'typescript:main', 'typescript:modules']));
-gulp.task('build', gulp.series(['build:typescript', 'build:webpack']));
+gulp.task('build', gulp.series(['build:typescript', 'build:webpack', 'sri']));
