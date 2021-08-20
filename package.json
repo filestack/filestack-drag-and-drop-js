@@ -2,10 +2,10 @@
   "name": "filestack-drag-and-drop-js",
   "version": "1.0.2",
   "description": "Official Drag and Drop library for Filestack",
-  "main": "filstack-dnd.js",
+  "main": "dist/main/src/index.js",
   "scripts": {
     "serve": "webpack-dev-server",
-    "build": "webpack",
+    "build": "npx gulp build",
     "build:watch": "webpack --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
     "release": "standard-version",
@@ -22,11 +22,12 @@
   "author": "Filestack <filestack.com>",
   "license": "MIT",
   "dependencies": {
+    "filestack-js": "^3.24.0",
     "trash-cli": "^4.0.0"
   },
   "devDependencies": {
     "aws-sdk": "^2.806.0",
-    "filestack-js": "3.20.0",
+    "del": "^6.0.0",
     "git-rev-sync": "^3.0.1",
     "gulp": "^4.0.2",
     "gulp-replace": "^1.0.0",
@@ -40,7 +41,7 @@
     "typescript": "^3.8.3",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.10.3",
+    "webpack-dev-server": "^3.11.2",
     "webpack-stream": "^6.1.1"
   }
 }

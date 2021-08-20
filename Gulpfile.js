@@ -12,7 +12,6 @@ const webpack = require('webpack-stream');
 const webpackCfg = require('./webpack.config.js') ;
 const del = require('del');
 
-
 // DEPLOYMENT CONFIGURATION OPTIONS
 const source = ['dist/browser/*.js', 'dist/browser/*.js.map', 'dist/browser/*.css', 'dist/browser/*.json']; // source for deploy
 const sourceSRI = ['dist/browser/*.js', 'dist/browser/*.css']; // source for sri generation
@@ -136,4 +135,4 @@ gulp.task('publish:version', (done) => {
 gulp.task('publish', gulp.series('sri', 'publish:beta', 'publish:version', 'publish:latest'));
 gulp.task('build:webpack', gulp.series(['build:webpack:prod']));
 gulp.task('build:typescript', gulp.series(['build:clean', 'typescript:main', 'typescript:modules']));
-gulp.task('build', gulp.series(['build:typescript', 'build:webpack']));
+gulp.task('build', gulp.series(['build:typescript', 'build:webpack', 'sri']));

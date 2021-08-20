@@ -22,7 +22,7 @@ module.exports = {
   output: {
     publicPath: 'dist',
     library: 'filestackDnD',
-    filename: 'filstack-dnd.js',
+    filename: 'filestack-drag-and-drop.min.js',
     path: path.resolve(__dirname, 'dist/browser'),
   },
   plugins: [
