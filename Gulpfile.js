@@ -55,7 +55,8 @@ const uploadFile = (version, CacheControl) => {
       CacheControl: `max-age=${CacheControl * 86400}`,
     },
     uploadPath: `${deployPath}/${version}`,
-    dryRun: ['develop', 'main'].indexOf(currentBranch) > -1 ? false : true,
+    dryRun: false,
+    // dryRun: ['develop', 'main'].indexOf(currentBranch) > -1 ? false : true,
   })
 }
 
@@ -132,7 +133,8 @@ gulp.task('publish:version', (done) => {
   return gulp.src(source).pipe(uploadFile(package.version, cacheControl.version));
 });
 
-gulp.task('publish', gulp.series('sri', 'publish:beta', 'publish:version', 'publish:latest'));
+gulp.task('publish', gulp.series('sri', 'publish:version', 'publish:latest'));
+gulp.task('publish:beta', gulp.series('sri', 'publish:beta'));
 gulp.task('build:webpack', gulp.series(['build:webpack:prod']));
 gulp.task('build:typescript', gulp.series(['build:clean', 'typescript:main', 'typescript:modules']));
 gulp.task('build', gulp.series(['build:typescript', 'build:webpack', 'sri']));
