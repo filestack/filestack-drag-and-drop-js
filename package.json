@@ -3,8 +3,6 @@
   "version": "1.0.2",
   "description": "Official Drag and Drop library for Filestack",
   "main": "dist/main/src/index.js",
-  "module": "dist/module/index.js",
-  "browser": "dist/browser/filestack-dnd.js",
   "scripts": {
     "serve": "webpack-dev-server",
     "build": "npx gulp build",

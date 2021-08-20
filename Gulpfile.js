@@ -12,7 +12,6 @@ const webpack = require('webpack-stream');
 const webpackCfg = require('./webpack.config.js') ;
 const del = require('del');
 
-
 // DEPLOYMENT CONFIGURATION OPTIONS
 const source = ['dist/browser/*.js', 'dist/browser/*.js.map', 'dist/browser/*.css', 'dist/browser/*.json']; // source for deploy
 const sourceSRI = ['dist/browser/*.js', 'dist/browser/*.css']; // source for sri generation
